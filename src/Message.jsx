@@ -1,12 +1,32 @@
 import React, {Component} from 'react';
 
-class Message extends Component {
-  render() {
+  function NameChanged(props) {
+      return (<div className="message system">
+                {props.check.content}
+              </div>);
+  }
+
+  function NameNotChanged(props) {
     return (
       <div className="message">
-        <span className="message-username">{this.props.messAll.username}</span>
-        <span className="message-content">{this.props.messAll.content}</span>
+        <span className="message-username">{props.check.username}</span>
+        <span className="message-content">{props.check.content}</span>
       </div>
+    );
+  }
+
+  function NameChecking(props) {
+    if(props.name.type === 'incomingNotification') {
+      return <NameChanged check={props.name}/>;
+    }
+    return <NameNotChanged check={props.name}/>;
+  }
+
+class Message extends Component {
+
+  render() {
+    return (
+      <NameChecking name={this.props.messAll} />
     );
   }
 }

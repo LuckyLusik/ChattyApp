@@ -16,6 +16,7 @@ const server = express()
 const wss = new SocketServer({ server });
 
 const messageDatabase = [];
+let peopleNumber = 0;
 
 wss.broadcastJSON = obj => wss.broadcast(JSON.stringify(obj));
 
@@ -30,8 +31,9 @@ wss.broadcast = data => {
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
-wss.on('connection', (ws) => {
+wss.on('connection', (ws, data) => {
   console.log('Client connected');
+  peopleNumber = wss.clients.size;
 
   ws.on('message', data => {
     console.log(`Got message from the client ${data}`);
@@ -39,15 +41,24 @@ wss.on('connection', (ws) => {
     console.log(`User ${objData.username} said ${objData.content}`);
 
     switch (objData.type) {
-      case 'sendMessage':
+      case 'postMessage':
         const objectToBroadcast = {
           id: uuid(),
           username: objData.username,
           content: objData.content,
-          type: 'sendMessage'
+          type: 'incomingMessage'
         };
         messageDatabase.push(objectToBroadcast);
         wss.broadcastJSON(objectToBroadcast);
+        break;
+      case 'postNotification':
+        const nameToBroadcast = {
+          id: uuid(),
+          content: objData.content,
+          type: 'incomingNotification'
+        };
+        messageDatabase.push(nameToBroadcast);
+        wss.broadcastJSON(nameToBroadcast);
         break;
       default:
     }
@@ -55,11 +66,23 @@ wss.on('connection', (ws) => {
   });
 
   const initialMessage = {
-    type: 'initial-messages',
-    messages: messageDatabase
+    type: 'initialMessages',
+    messages: messageDatabase,
   };
   ws.send(JSON.stringify(initialMessage));
 
+  const userConnected = {
+    type: 'userConnected',
+    people: peopleNumber
+  }
+  wss.broadcastJSON(userConnected);
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
-  ws.on('close', () => console.log('Client disconnected'));
+  ws.on('close', () => {
+    console.log('Client disconnected');
+    const userDisconnected = {
+    type: 'userDisconnected',
+    people: peopleNumber - 1
+  }
+  wss.broadcastJSON(userDisconnected);
+  });
 });
