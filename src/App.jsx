@@ -86,14 +86,26 @@ componentDidMount() {
 
   _newName = (nameNew) => {
     if(nameNew !== this.state.currentUser.name) {
-      const nameChanged = {
-      type: 'postNotification',
-      content: `${this.state.currentUser.name} has changed their name to ${nameNew}.`
-    };
-    this.socket.send(JSON.stringify(nameChanged));
-    this.setState(prevState => ({
-      currentUser: { ...prevState.currentUser, name: nameNew }
-      }))
+      if(!nameNew) {
+        const nameChanged = {
+        type: 'postNotification',
+        content: `${this.state.currentUser.name} has changed their name to Anonymous.`
+      };
+        this.socket.send(JSON.stringify(nameChanged));
+        this.setState(prevState => ({
+          currentUser: { ...prevState.currentUser, name: 'Anonymous' }
+          }))
+      } else {
+        const nameChanged = {
+          type: 'postNotification',
+          content: `${this.state.currentUser.name} has changed their name to ${nameNew}.`
+        };
+        this.socket.send(JSON.stringify(nameChanged));
+        this.setState(prevState => ({
+          currentUser: { ...prevState.currentUser, name: nameNew }
+          }))
+      }
+
     }
   };
 
