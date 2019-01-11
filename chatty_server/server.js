@@ -16,7 +16,10 @@ const server = express()
 const wss = new SocketServer({ server });
 
 const messageDatabase = [];
+const colorArray = ['#E37222', '#07889B', '#A0015B', '#007849'];
+let colorNumber = 0;
 let peopleNumber = 0;
+
 
 wss.broadcastJSON = obj => wss.broadcast(JSON.stringify(obj));
 
@@ -31,9 +34,15 @@ wss.broadcast = data => {
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
-wss.on('connection', (ws, data) => {
+wss.on('connection', (ws) => {
   console.log('Client connected');
   peopleNumber = wss.clients.size;
+
+  if(colorNumber > 3) {
+    colorNumber = 0;
+  }
+
+  console.log('color: ', colorArray[colorNumber], "colorNumber: ", colorNumber);
 
   ws.on('message', data => {
     console.log(`Got message from the client ${data}`);
@@ -46,7 +55,8 @@ wss.on('connection', (ws, data) => {
           id: uuid(),
           username: objData.username,
           content: objData.content,
-          type: 'incomingMessage'
+          type: 'incomingMessage',
+          color: objData.color
         };
         messageDatabase.push(objectToBroadcast);
         wss.broadcastJSON(objectToBroadcast);
@@ -68,8 +78,11 @@ wss.on('connection', (ws, data) => {
   const initialMessage = {
     type: 'initialMessages',
     messages: messageDatabase,
+    colorName: colorArray[colorNumber]
   };
   ws.send(JSON.stringify(initialMessage));
+
+  colorNumber = colorNumber + 1;
 
   const userConnected = {
     type: 'userConnected',

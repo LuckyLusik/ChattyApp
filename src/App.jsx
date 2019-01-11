@@ -9,7 +9,8 @@ class App extends Component {
     this.state = {
       currentUser: {name: "Bob"},
       messages: [], // messages coming from the server will be stored here as they arrive
-      people: 0
+      people: 0,
+      color: ''
     };
 
     this._newMessage = this._newMessage.bind(this);
@@ -20,7 +21,7 @@ componentDidMount() {
 
   this.socket = new WebSocket('ws://localhost:3001');
 
-  this.socket.onopen = peopload => {
+  this.socket.onopen = () => {
     console.log('Connected to WebSocket');
   };
 
@@ -35,6 +36,7 @@ componentDidMount() {
         break;
       case 'initialMessages':
         this.setState({ messages: json.messages });
+        this.setState({ color: json.colorName });
         break;
       case 'incomingNotification':
         this.setState({
@@ -71,6 +73,7 @@ componentDidMount() {
     const currentUser = this.state.currentUser;
     const messagesAll = this.state.messages;
     const numberOfPeople = this.state.people;
+    const colorName = this.state.color;
 
     return (
       <div>
@@ -113,7 +116,8 @@ componentDidMount() {
     const objectToSend = {
       type: 'postMessage',
       content: value,
-      username: this.state.currentUser.name
+      username: this.state.currentUser.name,
+      color: this.state.color
     };
     this.socket.send(JSON.stringify(objectToSend));
   };

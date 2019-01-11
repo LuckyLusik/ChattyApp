@@ -9,7 +9,7 @@ import React, {Component} from 'react';
   function NameNotChanged(props) {
     return (
       <div className="message">
-        <span className="message-username">{props.check.username}</span>
+        <span style={ { color: props.check.color } } className="message-username">{props.check.username}</span>
         <span className="message-content">{props.check.content}</span>
       </div>
     );

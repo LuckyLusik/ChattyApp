@@ -3,9 +3,10 @@ import Message from './Message.jsx';
 
 class MessageList extends Component {
   render() {
+    const colorN = this.props.color;
     const messagesAll = this.props.messagesAll;
     const messageList = messagesAll.map((message) => {
-      return <Message key={message.id} messAll={message}/>
+      return <Message key={message.id} messAll={message} />
     });
 
     return (
