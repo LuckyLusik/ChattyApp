@@ -36,4 +36,4 @@ If the user changes their name, all connected users are notified of the name cha
 ## Getting started
 
 - Install all dependencies (using the "npm install" command).
-- Run the development web server using the "npm start" command.
+- Run the development web server from root folder and server from chatty_server using the "npm start" command.
