@@ -18,15 +18,16 @@ class App extends Component {
   }
 
 componentDidMount() {
-
+  // Created WebSocket connection
   this.socket = new WebSocket('ws://localhost:3001');
-
+  // Connection opened
   this.socket.onopen = () => {
     console.log('Connected to WebSocket');
   };
-
+  // When server sends a message to client
+  // we set states depends on type of message
   this.socket.onmessage = payload => {
-    console.log('Got message from server', payload);
+    console.log('Got message from server');
     const json = JSON.parse(payload.data);
     switch (json.type) {
       case 'incomingMessage':
@@ -52,28 +53,16 @@ componentDidMount() {
       default:
     }
   };
-
+  // // Connection closed
   this.socket.onclose = () => {
     console.log('Disconnected from the WebSocket');
   };
-
-  // console.log("componentDidMount <App />");
-  // setTimeout(() => {
-  //   console.log("Simulating incoming message");
-  //   // Add a new message to the list of messages in the data store
-  //   const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
-  //   const messages = this.state.messages.concat(newMessage)
-  //   // Update the state of the app component.
-  //   // Calling setState will trigger a call to render() in App and all child components.
-  //   this.setState({messages: messages})
-  // }, 3000);
 }
 
   render() {
     const currentUser = this.state.currentUser;
     const messagesAll = this.state.messages;
     const numberOfPeople = this.state.people;
-    const colorName = this.state.color;
 
     return (
       <div>
@@ -87,13 +76,17 @@ componentDidMount() {
     );
   }
 
+  // On name changed
   _newName = (nameNew) => {
+    // When user has changed his name
     if(nameNew !== this.state.currentUser.name) {
+      // If there is an empty name string -
+      // current user name will be Anonymous
       if(!nameNew) {
         const nameChanged = {
-        type: 'postNotification',
-        content: `${this.state.currentUser.name} has changed their name to Anonymous.`
-      };
+          type: 'postNotification',
+          content: `${this.state.currentUser.name} has changed their name to Anonymous.`
+        };
         this.socket.send(JSON.stringify(nameChanged));
         this.setState(prevState => ({
           currentUser: { ...prevState.currentUser, name: 'Anonymous' }
@@ -103,15 +96,17 @@ componentDidMount() {
           type: 'postNotification',
           content: `${this.state.currentUser.name} has changed their name to ${nameNew}.`
         };
-        this.socket.send(JSON.stringify(nameChanged));
-        this.setState(prevState => ({
-          currentUser: { ...prevState.currentUser, name: nameNew }
-          }))
+      this.socket.send(JSON.stringify(nameChanged));
+      this.setState(prevState => ({
+        currentUser: { ...prevState.currentUser, name: nameNew }
+        }))
       }
-
     }
+    // If new name is equal to old name - nothing happends
   };
 
+  // On new message:
+  // sending a new object to server
   _newMessage = (value) => {
     const objectToSend = {
       type: 'postMessage',

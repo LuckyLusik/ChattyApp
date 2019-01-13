@@ -1,45 +1,39 @@
-React Boilerplate
+Chatty App
 =====================
 
-A minimal and light dev environment for ReactJS.
+Chatty allows users to communicate with each other without having to register accounts. It uses React as well as modern tools for Node including Webpack and Babel.
 
-### Usage
+## Final Product
 
-Clone the boilerplate and create your own git repo.
+On connection:
+![On connection](https://github.com/LuckyLusik/TinyAppProject/blob/master/docs/urls-page.png)
 
-```
-git clone git@github.com:lighthouse-labs/react-simple-boilerplate.git
-cd react-simple-boilerplate
-git remote rm origin
-git remote add origin [YOUR NEW REPOSITORY]
-# Manually update your package.json file
-```
+This application has real-time functionality where the user does not have to reload the page in order to see updates. Header displays the count of connected users. When the number of connected users changes, this count will be updated for all connected users. When the user sends a chat message, all connected users receive and display the message. Different users' names will each be coloured differently.
+![On connection](https://github.com/LuckyLusik/TinyAppProject/blob/master/docs/urls-page.png)
 
-Install the dependencies and start the server.
+If the user changes their name, all connected users are notified of the name change. In order to change the name the user needs to type new name and press ENTER. If the user leaves the name field empty he will be displayed under "Anonymous".
+![On connection](https://github.com/LuckyLusik/TinyAppProject/blob/master/docs/urls-page.png)
 
-```
-npm install
-npm start
-open http://localhost:3000
-```
+## Dependencies
 
-### Static Files
+* express
+* ws
+* uuid
+* babel-core
+* babel-loader
+* babel-preset-es2015
+* babel-preset-react
+* css-loader
+* node-sass
+* sass-loader
+* sockjs-client
+* style-loader
+* webpack
+* webpack-dev-server
+* react
+* react-dom
 
-You can store static files like images, fonts, etc in the `build` folder.
+## Getting started
 
-For example, if you copy a file called my_image.png into the build folder you can access it using `http://localhost:3000/build/my_image.png`.
-
-### Linting
-
-This boilerplate project includes React ESLint configuration.
-
-```
-npm run lint
-```
-
-### Dependencies
-
-* React
-* Webpack
-* [babel-loader](https://github.com/babel/babel-loader)
-* [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
+- Install all dependencies (using the "npm install" command).
+- Run the development web server using the "npm start" command.

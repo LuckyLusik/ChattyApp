@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 
+  // Display a message when user's name has been changed
   function NameChanged(props) {
-      return (<div className="message system">
-                {props.check.content}
-              </div>);
+    return (<div className="message system">
+              {props.check.content}
+            </div>);
   }
 
+  // Regular message with colored user's name
   function NameNotChanged(props) {
     return (
       <div className="message">
@@ -15,6 +17,7 @@ import React, {Component} from 'react';
     );
   }
 
+  // Displaying a message depending on a message type
   function NameChecking(props) {
     if(props.name.type === 'incomingNotification') {
       return <NameChanged check={props.name}/>;
@@ -23,11 +26,8 @@ import React, {Component} from 'react';
   }
 
 class Message extends Component {
-
   render() {
-    return (
-      <NameChecking name={this.props.messAll} />
-    );
+    return <NameChecking name={this.props.messAll} />;
   }
 }
 export default Message;

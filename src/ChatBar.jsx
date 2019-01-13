@@ -4,7 +4,6 @@ class Chatbar extends Component {
 
   constructor() {
     super();
-
     this.state = {
       textValue: ''
     };
@@ -27,17 +26,23 @@ class Chatbar extends Component {
     );
   }
 
+  // On input change - update a state of message content
   _updateTextValue(e) {
     this.setState({ textValue: e.target.value });
   }
 
+  // On name change
   _nameNew = (e) => {
+    // If Enter key was pressed
     if(e.keyCode === 13){
       this.props.newName(e.target.value);
+      // Input with refs "msg" will be in focus
       this.refs["msg"].focus();
     }
    }
 
+   // If Enter key was pressed -
+   // update a state of message and clear input
   _keyPress(e){
     if(e.keyCode === 13){
       this.props.onEnter(this.state.textValue);
@@ -45,7 +50,5 @@ class Chatbar extends Component {
       e.target.value = '';
     }
    }
-
-
 }
 export default Chatbar;
